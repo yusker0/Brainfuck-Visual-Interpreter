@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainfuck Visual Interpreter", "Brainfuck Visual Interpreter.csproj", "{05D143EB-F148-4ED2-BA6C-63347FB305AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05D143EB-F148-4ED2-BA6C-63347FB305AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05D143EB-F148-4ED2-BA6C-63347FB305AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05D143EB-F148-4ED2-BA6C-63347FB305AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05D143EB-F148-4ED2-BA6C-63347FB305AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50641C23-2CA8-4B88-B512-8DD31BC94E5B}
+	EndGlobalSection
+EndGlobal

@@ -6,6 +6,11 @@
     <RootNamespace>Brainfuck_Visual_Interpreter</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\logo.ico" />
+  </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Brainfuck_Visual_Interpreter"
         mc:Ignorable="d"
         WindowStyle="None"
-        Icon="{StaticResource logo}"
+        Icon="{StaticResource consoleLogo}"
         ResizeMode="CanResizeWithGrip" 
         AllowsTransparency="True" 
         Background="Black"

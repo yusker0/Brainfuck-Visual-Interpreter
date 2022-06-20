@@ -1,73 +1,1004 @@
 ﻿<Window x:Class="Brainfuck_Visual_Interpreter.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Brainfuck_Visual_Interpreter"
-        mc:Ignorable="d" Height="720" Width="1280" WindowStyle="None" Background="#FFB9CCFF" ResizeMode="NoResize" AllowsTransparency="True" MinWidth="502">
-
-
-    <Grid Height="30
-          " Width="Auto" VerticalAlignment="Top" MouseLeftButtonDown="header_MouseLeftButtonDown" x:Name="header" Background="#E6E6E6">
-        <Grid >
-            <StackPanel x:Name="programButtons" Width="354" Orientation="Horizontal"  HorizontalAlignment="Left">
-                <Button x:Name="fileButton" Width="43"
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    File
-                </Button>
-                <Button x:Name="runButton" Width="50"
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    Run
-                </Button>
-                <Button x:Name="playButton" Width="58"
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    Play
-                </Button>
-                <Button x:Name="speedPlusButton" Width="75"
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    Speed+
-                </Button>
-                <Button x:Name="speedMinusButton" Width="75"
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    Speed-
-                </Button>
-                <Button x:Name="helpButton" Width="51" 
-                            HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
-                    Help
-                </Button>
-                <Grid Width="2" Background="#FF868686">
-                    <TextBlock x:Name="a" Text=""></TextBlock>
-                </Grid>
-            </StackPanel>
-            <StackPanel x:Name="systemButtons" Width="152" Orientation="Horizontal" HorizontalAlignment="Right" >
-                <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="2" Height="30" Background="#FF868686"/>
-                <Button   x:Name="minimizeButton" Width="50" HorizontalAlignment="Right"
-                            Padding="20 10"
-                            BorderThickness="0,0,0,0" Background="#00000000" 
-                            Click="minimizeButton_Click" BorderBrush="#FF868686" >
-                    <Image Source="{StaticResource line}" RenderTransformOrigin="0.85,0.05" />
-                </Button>
-                <Grid>
-                    <Button x:Name="maximizeButton" Width="50"
-                            Padding="10 10"
-                            BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
-                            Click="maximizeButton_Click"  Foreground="Black" HorizontalAlignment="Right" >
-                        <Image Source="{StaticResource square}"  RenderTransformOrigin="0.85,0.05" OpacityMask="White"/>
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:Brainfuck_Visual_Interpreter"
+    mc:Ignorable="d" 
+        Height="720" Width="1280" 
+        WindowStyle="None" Background="#FFB9CCFF"
+        ResizeMode="NoResize" AllowsTransparency="True" MinWidth="688"
+        Title="Brainfuck Visual Interpreter"
+        Icon="{StaticResource logo}">
+    <Border BorderBrush="Black" BorderThickness="1,1,1,1" >
+        <DockPanel>
+            <Grid x:Name="header" Height="30" DockPanel.Dock="Top" VerticalAlignment="Top" MouseLeftButtonDown="header_MouseLeftButtonDown" Background="#E6E6E6" Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="303"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="334"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel x:Name="programButtons" Grid.Column="0" Orientation="Horizontal"  HorizontalAlignment="Left">
+                    <Button x:Name="fileButton" Width="43" Click="fileButton_Click" Style="{StaticResource YKButtonStyle}"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6">
+                        File
                     </Button>
-                    <Button x:Name="normalizeButton" Width="50" HorizontalAlignment="Right"
-                            Padding="10 10"
-                            BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
-                            Click="normalizeButton_Click"   Visibility="Hidden">
-                        <Image Source="{StaticResource squares}" RenderTransformOrigin="0.85,0.05" OpacityMask="White"/>
+                    <Button x:Name="runButton" Width="50" Click="runButton_Click" Style="{StaticResource YKButtonStyle}"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Run
                     </Button>
+                    <Button x:Name="playButton" Style="{StaticResource YKButtonStyle}" Width="58" Click="playButton_Click"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Play
+                    </Button>
+                    <Button x:Name="speedPlusButton" Width="75" Click="speedPlusButton_Click" Style="{StaticResource YKButtonStyle}"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Speed+
+                        <Button.ToolTip>
+                            <ToolTip x:Name="speedPlusTip">
+                                1 step/second
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="speedMinusButton" Width="75" Click="speedMinusButton_Click" Style="{StaticResource YKButtonStyle}"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Speed-
+                        <Button.ToolTip>
+                            <ToolTip x:Name="speedMinusTip">
+                                1 step/second
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+                    <Grid Width="2" Background="#FF868686">
+                    </Grid>
+                </StackPanel>
+                <TextBlock x:Name="appName" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Brainfuck Visual Interpreter</TextBlock>
+                <StackPanel x:Name="systemButtons" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="2" Height="30" Background="#FF868686"/>
+                    <Button x:Name="cancelStepButton" Style="{DynamicResource YKButtonStyle}" Width="90" Click="cancelStepButton_Click"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Cancel step
+                    </Button>
+                    <Button Style="{DynamicResource YKButtonStyle}" x:Name="nextStepButton" Width="90" Click="nextStepButton_Click"
+                                    HorizontalAlignment="Left" BorderThickness="0,0,0,0" Foreground="Black" BorderBrush="Black" Background="#FFE6E6E6" IsEnabled="False">
+                        Next step
+                    </Button>
+                    <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Width="2" Height="30" Background="#FF868686"/>
+                    <Button x:Name="minimizeButton" Style="{StaticResource YKButtonStyle}" Width="50" HorizontalAlignment="Right"
+                                    Padding="20 10"
+                                    BorderThickness="0,0,0,0" Background="#00000000" 
+                                    Click="minimizeButton_Click" BorderBrush="#FF868686" >
+                        <Image  x:Name="a" Source="{StaticResource line}" RenderTransformOrigin="0.85,0.05" />
+                    </Button>
+                    <Grid>
+                        <Button x:Name="maximizeButton" Width="50"
+                                    Padding="10 10"
+                                    BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
+                                    Click="maximizeButton_Click"  Foreground="Black" HorizontalAlignment="Right" >
+                            <Image Source="{StaticResource square}"  RenderTransformOrigin="0.85,0.05" OpacityMask="White"/>
+                        </Button>
+                        <Button x:Name="normalizeButton" Width="50" HorizontalAlignment="Right"
+                                    Padding="10 10"
+                                    BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
+                                    Click="normalizeButton_Click"   Visibility="Hidden">
+                            <Image Source="{StaticResource squares}" RenderTransformOrigin="0.85,0.05" OpacityMask="White"/>
+                        </Button>
+                    </Grid>
+                    <Button x:Name="exitButton" Width="50"
+                                    Padding="10, 10" HorizontalAlignment="Right" 
+                                    BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
+                                    Click="exitButton_Click" >
+                        <Image Source="{StaticResource cross}"  RenderTransformOrigin="0.85,0.05"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="81*"/>
+                    <ColumnDefinition Width="19*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.26*"/>
+                    <RowDefinition Height="98.94*"/>
+                    <RowDefinition Height="0.8*"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer x:Name="bodyScroll" VerticalScrollBarVisibility="Hidden" Style="{DynamicResource RoundedScrollViewerStyle}" Grid.Column="0" Grid.Row="1">
+                    <Grid x:Name="body"  Height="665">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.45*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.26*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="pointer" Source="{StaticResource pointer}" Grid.Row="0" Grid.Column="1" Margin="0 5 0 0"/>
+                        <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c2" Foreground="White">
+                                                0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="4" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="5" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="6" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="7" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="8" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="9" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="10" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="11" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="12" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="13" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="14" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="15" Style="{StaticResource borderPanel}">
+                            <Viewbox>
+                                <TextBlock x:Name="r0c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r1c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="5" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r2c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="7" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r3c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="9" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r4c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="11" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r5c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="1" Background="{StaticResource panelColor}" 
+                                    BorderThickness="2,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c0" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="2" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c1" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="3" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c2" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="4" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c3" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="5" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c4" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="6" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c5" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="7" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c6" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="8" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c7" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="9" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c8" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="10" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c9" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="11" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c10" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="12" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c11" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="13" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c12" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="14" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,1,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c13" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="13" Grid.Column="15" Background="{StaticResource panelColor}" 
+                                    BorderThickness="1,2,2,2" BorderBrush="Black">
+                            <Viewbox>
+                                <TextBlock x:Name="r6c14" Foreground="White">
+                                            0
+                                </TextBlock>
+                            </Viewbox>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+                <Grid x:Name="sidebar" Grid.Column="1" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7.1*"/>
+                        <ColumnDefinition Width="90.16*"/>
+                        <ColumnDefinition Width="2.74*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="46.23"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Viewbox Grid.Row="0" Grid.Column="1">
+                        <TextBlock x:Name="filename">Greetings.bf</TextBlock>
+                    </Viewbox>
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <ScrollViewer x:Name ="sidebarScroll" CanContentScroll="True" Style="{DynamicResource RoundedScrollViewerStyle}" VerticalScrollBarVisibility="Visible">
+                            <TextBlock FontSize="24" Foreground="#6F6f6f"  TextWrapping="Wrap" x:Name="codeBlock" SizeChanged="codeBlock_SizeChanged">
+                                <Span Foreground="Black">-</Span> [-------&gt;+&lt;]&gt;-.-[-&gt;+++++&lt;]&gt;++.+++++++..+++.[---&gt;+&lt;]&gt;----.-.++++[-&gt;++&lt;]&gt;+.[-----&gt;+&lt;]&gt;-.[----&gt;+&lt;]&gt;+++.-[---&gt;++&lt;]&gt;-.++++++++++.+[----&gt;+&lt;]&gt;+++.+[-&gt;++&lt;]&gt;.---[-----&gt;+&lt;]&gt;-.+++[-&gt;+++&lt;]&gt;++.++++++++.+++++.--------.-[---&gt;+&lt;]&gt;--.+[-&gt;+++&lt;]&gt;+.++++++++.-[++&gt;---&lt;]&gt;+.&gt;+[---&gt;++&lt;]&gt;.++++[-&gt;++++&lt;]&gt;+.++++++++++.++.[-&gt;+++&lt;]&gt;++.+++++++++++.[++&gt;---&lt;]&gt;--.++++[-&gt;++&lt;]&gt;+.+[---&gt;+&lt;]&gt;.++++++.+++[-&gt;+++&lt;]&gt;.+++++++++++++.--.++.-------------.[---&gt;+&lt;]&gt;---.+++[-&gt;+++&lt;]&gt;.+++++++++++++.[---&gt;+&lt;]&gt;-----.
+                            </TextBlock>
+                            <!--
+                            <RichTextBox x:Name="boxCode" IsReadOnly="True" FontSize="30" Foreground="#FF6E6E6E" Background="#00000000" BorderThickness="0,0,0,1" VerticalAlignment="Top">
+                                <FlowDocument x:Name="flowBox">
+                                    <Paragraph>
+                                        +
+                                    </Paragraph>
+                                </FlowDocument>
+                            </RichTextBox>
+                            -->
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
-                <Button x:Name="exitButton" Width="50"
-                            Padding="10, 10" HorizontalAlignment="Right" 
-                            BorderThickness="0,0,0,0" BorderBrush="#00000000" Background="#00000000" 
-                            Click="exitButton_Click" >
-                    <Image Source="{StaticResource cross}"  RenderTransformOrigin="0.85,0.05"/>
-                </Button>
-            </StackPanel> 
-        </Grid>
-    </Grid>
+            </Grid>
+        </DockPanel>
+    </Border>
 </Window>
